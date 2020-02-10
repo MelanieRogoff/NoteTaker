@@ -20,9 +20,25 @@ app.get("/*", function(req, res) {
     res.sendFile(path.join(__dirname, "develop/public/index.html"));
 });
   
+//API Routes
 
+app.get("/api/notes", function(req, res) {
+    //Should read db.json & return ALL saved notes as JSON
+});
 
+app.post("/api/notes", function(req, res) {
+    //1: Receive new note to save on req body
+    //2: Add it to db.json
+    //3: Return the new note to client
+})
 
+app.delete("/api/notes/:id", function(req, res) {
+    //1. Should receive query parameter containing ID of note to delete
+    //2: Give each note a unique ID when saved
+    //3: To delete notes, I need to read ALL notes from db.json
+        //a. Then I need to REMOVE note w/given ID property
+        //b. Then I need to REWRITE the notes to db.json
+} )
 
 
 // Starts the server to begin listening
