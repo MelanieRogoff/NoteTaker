@@ -23,13 +23,18 @@ app.get("/*", function(req, res) {
 //API Routes
 
 app.get("/api/notes", function(req, res) {
-    //Should read db.json & return ALL saved notes as JSON
-});
+    //Below code reads db.json & return ALL saved notes as JSON
+        fs.readFile('db.json', (err, json) => {
+                let obj = (json);
+                res.json(obj);
+        })
+    })
 
 app.post("/api/notes", function(req, res) {
-    //1: Receive new note to save on req body
-    //2: Add it to db.json
-    //3: Return the new note to client
+    //1. Enable the save button
+    //2: Receive new note to save on req body 
+    //3: Add it to db.json
+    //4: Return the new note to client
 })
 
 app.delete("/api/notes/:id", function(req, res) {
