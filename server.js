@@ -1,5 +1,6 @@
 const express = require("express");
 const path = require("path");
+const routers = require("./Develop/public/assets/js/index.js");
 
 //Set up Express App:
 const app = express();
@@ -8,42 +9,43 @@ const PORT = 3000;
 //Sets up Express app to handle data parsing
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json()); 
-
+app.use(routers);
 
 // Route for notes HTML
 app.get("/notes", function(req, res) {
-    res.sendFile(path.join(__dirname, "develop/public/notes.html"));
+    res.sendFile(path.join(__dirname, "Develop/public/notes.html"));
   });
 
 //Route for index HTML
 app.get("/*", function(req, res) {
-    res.sendFile(path.join(__dirname, "develop/public/index.html"));
+    res.sendFile(path.join(__dirname, "Develop/public/index.html"));
 });
   
 //API Routes
 
 app.get("/api/notes", function(req, res) {
-    //Below code reads db.json & return ALL saved notes as JSON
-        fs.readFile('db.json', (err, json) => {
-                let obj = (json);
-                res.json(obj);
+        fs.readFile('db.json', (err, json) => { //read db.json
+                let obj = (json); 
+                res.json(obj); //return ALL saved notes as JSON
         })
     })
 
 app.post("/api/notes", function(req, res) {
-    //1. Enable the save button
-    //2: Receive new note to save on req body 
-    //3: Add it to db.json
-    //4: Return the new note to client
-})
+    //1. Enable save button
+    //2. Give each note a unique ID when saved
+    //3: Receive new note to save on req body 
+    //4: Add it to db.json
+    //5: Return the new note to client
+});
 
 app.delete("/api/notes/:id", function(req, res) {
-    //1. Should receive query parameter containing ID of note to delete
-    //2: Give each note a unique ID when saved
-    //3: To delete notes, I need to read ALL notes from db.json
-        //a. Then I need to REMOVE note w/given ID property
-        //b. Then I need to REWRITE the notes to db.json
-} )
+    //1. Code to receive query parameter containing ID of note to delete
+    //2: To delete notes:
+        fs.readFile('db.json', (err, json) => { //Read ALL notes from db.json
+        //b. Then REMOVE note w/given ID property
+        //c. Then REWRITE the notes to db.json
+})
+});
 
 
 // Starts the server to begin listening
