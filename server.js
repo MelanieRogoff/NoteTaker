@@ -21,8 +21,6 @@ app.get("/notes", function(req, res) {
 //API Routes
 app.get("/api/notes", function(req, res) {
         fs.readFile('db.json', 'utf-8', (err, json) => { //read db.json
-            console.log(json);
-
                 let obj = (json); 
                 res.json(obj); //return ALL saved notes as JSON
 
@@ -38,22 +36,22 @@ app.post("/api/notes", function(req, res) {
         fs.readFile('db.json', 'utf-8', (err, json) => { //read db.json
             const noteArray = JSON.parse(json);
             //newNotes is an object. Need to set id property by doing .id and then setting it to something
-            newNotes.id = noteArray.length + 1; //Have to add 1 because it automatically was off by one. This is the way we're creating the id
+            newNotes.id = noteArray.length + 1; //Have to add 1 because it automatically was off by 1. This is the way we're creating the id
             noteArray.push(newNotes); //Add it to db.json
             fs.writeFile('db.json', JSON.stringify(noteArray), (err) => {
                 if (err) {
                     throw err;
                 } 
             })
-            return res.json(noteArray); //return new note to client
+            return res.json(noteArray); //return new note to client -- MAY NEED TO PUT BACK IN WRITEFILE
 });
 })
 
 app.delete("/api/notes/:id", function(req, res) {
-    //1. Code to receive query parameter containing ID of note to delete
+        const idGrab = req.params.id; // this gets query param containing the note id
     //2: To delete notes:
         fs.readFile('db.json', 'utf-8', (err, json) => { //read ALL notes from db.json
-        //b. Then REMOVE note w/given ID property
+        //b. Then REMOVE note w/given ID property -- ensure ids corres w/array indexes. START AT 0. Look up slice(). If the id is the index, just slice the array AT that id and then we'll have the new values
         //c. Then REWRITE the notes to db.json
 })
 });
