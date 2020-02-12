@@ -1,6 +1,5 @@
 const express = require("express");
 const path = require("path");
-const routers = require("./Develop/public/assets/js/index.js");
 
 //Set up Express App:
 const app = express();
@@ -9,18 +8,12 @@ const PORT = 3000;
 //Sets up Express app to handle data parsing
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json()); 
-app.use(routers);
 
 // Route for notes HTML
 app.get("/notes", function(req, res) {
-    res.sendFile(path.join(__dirname, "Develop/public/notes.html"));
+    res.sendFile(path.join(__dirname, "/public/notes.html"));
   });
 
-//Route for index HTML
-app.get("/*", function(req, res) {
-    res.sendFile(path.join(__dirname, "Develop/public/index.html"));
-});
-  
 //API Routes
 
 app.get("/api/notes", function(req, res) {
@@ -32,7 +25,7 @@ app.get("/api/notes", function(req, res) {
 
 app.post("/api/notes", function(req, res) {
     //1. Enable save button
-    //2. Give each note a unique ID when saved
+    //2. Give each note unique ID when saved
     //3: Receive new note to save on req body 
     //4: Add it to db.json
     //5: Return the new note to client
@@ -47,6 +40,10 @@ app.delete("/api/notes/:id", function(req, res) {
 })
 });
 
+//Route for index HTML -- put down here  because * prevents anything being read after it
+app.get("*", function(req, res) {
+    res.sendFile(path.join(__dirname, "/public/index.html"));
+});
 
 // Starts the server to begin listening
 app.listen(PORT, function() {
