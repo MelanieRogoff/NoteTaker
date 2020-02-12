@@ -19,46 +19,46 @@ app.get("/notes", function(req, res) {
   });
 
 //API Routes
-
 app.get("/api/notes", function(req, res) {
-        fs.readFile('db.json', (err, json) => { //read db.json
+        fs.readFile('db.json', 'utf-8', (err, json) => { //read db.json
+            console.log(json);
+
                 let obj = (json); 
                 res.json(obj); //return ALL saved notes as JSON
+
         })
     })
 
 app.post("/api/notes", function(req, res) {
-        let idCount = 1; //create variable, set it to 1 b/c if the arraylength=0 the id will be 1
-        if (jsonFile.length > 0) { //check to see if db.json array is greater than 0 
-        idCount = jsonFile.pop().id + 1; //if it is, set idCount to last id grabbed, then add 1 to it -- HAVE to grab last one to change it dynamically
+        let idCount = 1; //create variable, set to 1 b/c if arraylength=0 the id will be 1
+        if (jsonFile.length > 0) { //if db.json array is greater than 0 
+            idCount = jsonFile.pop().id; //if it is, set idCount to last id grabbed, then add 1 to it -- HAVE to grab last one to change it dynamically
         }
         const newNotes = req.body //new note to save 
-        fs.readFile('db.json', (err, json) => { //read db.json
+        fs.readFile('db.json', 'utf-8', (err, json) => { //read db.json
             const noteArray = JSON.parse(json);
-            console.log(noteArray); //RN THIS PRINTS OUT EVERY OBJECT EXCEPT THE LAST ONE
-            //Step A. make a key that's an id
-            //Step B. assign it the value of the variable i made for the id
-
-            noteArray.push(newNotes); //Step 4: Add it to db.json - CHECK IT WORKS
+            //newNotes is an object. Need to set id property by doing .id and then setting it to something
+            newNotes.id = noteArray.length + 1; //Have to add 1 because it automatically was off by one. This is the way we're creating the id
+            noteArray.push(newNotes); //Add it to db.json
             fs.writeFile('db.json', JSON.stringify(noteArray), (err) => {
                 if (err) {
                     throw err;
                 } 
-                return res.json(noteArray); //return the new note to client
             })
+            return res.json(noteArray); //return new note to client
 });
 })
 
 app.delete("/api/notes/:id", function(req, res) {
     //1. Code to receive query parameter containing ID of note to delete
     //2: To delete notes:
-        fs.readFile('db.json', (err, json) => { //read ALL notes from db.json
+        fs.readFile('db.json', 'utf-8', (err, json) => { //read ALL notes from db.json
         //b. Then REMOVE note w/given ID property
         //c. Then REWRITE the notes to db.json
 })
 });
 
-//Route for index HTML -- put here because * prevents anything being read after it
+//Route for index.html -- put here b/c * prevents anything being read after it
 app.get("*", function(req, res) {
     res.sendFile(path.join(__dirname, "/public/index.html"));
 });
