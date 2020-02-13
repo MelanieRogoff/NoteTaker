@@ -50,8 +50,7 @@ app.delete("/api/notes/:id", function(req, res, json) {
     const newNote = JSON.parse(json);  //make a newNote variable w/the JSON data
     for (let i = 0; i < newNote.length; i++) { //loop through the array of notes
         if (newNote[i].id == req.params.id) { //for notes w/ids that match req.params.id
-            newNote.splice(i, 1); //remove the specified note 
-            console.log(newNote);
+            newNote.splice(i, 1); //remove the specified note (have to do i for index, and 1 to signify we delete only 1 entry)
         }
     }
         fs.writeFile('db.json', JSON.stringify(newNote), (err) => { //Rewrite notes minus deleted notes to db.json
