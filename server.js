@@ -28,14 +28,14 @@ app.get("/api/notes", function(req, res) {
 app.post("/api/notes", function(req, res) {
     let idCount = 1; //create variable, set to 1 b/c if arraylength=0 the id will be 1
     if (jsonFile.length > 0) { //if db.json array is greater than 0 
-        idCount = jsonFile.pop().id; //set idCount to last id grabbed -- MUST grab last one to change it dynamically
+        idCount = jsonFile.pop().id; //set idCount to last id grabbed - get last one (pop()) to change it dynamically
     }
     const newNotes = req.body //new note to save 
     fs.readFile('db.json', 'utf-8', (err, json) => { //read db.json
         const noteArray = JSON.parse(json);
-        //newNotes is an object. Need to set id property by doing .id and then setting it to something
-        newNotes.id = noteArray.length + 1; //Add 1 b/c it automatically was off by 1. This is how we create the id
-        noteArray.push(newNotes); //Add it to db.json
+        //newNotes=object. Need to set id property by doing .id, then setting it to a value. 
+        newNotes.id = noteArray.length + 1; //array.length+1 b/c it=naturally off by 1. Makes id correspond to index
+        noteArray.push(newNotes); //Add to db.json
         fs.writeFile('db.json', JSON.stringify(noteArray), (err) => {
             if (err) {
                 throw err;
@@ -46,11 +46,10 @@ app.post("/api/notes", function(req, res) {
 })
 
 app.delete("/api/notes/:id", function(req, res, json) {
-    const idGrab = req.params.id; // this gets query param containing the note id
-    //2: To delete notes:
+    const idGrab = req.params.id - 1; // gets query param containing note id. -1 lets us delete the last note.
     fs.readFile('db.json', 'utf-8', (err, json) => { //read ALL notes from db.json
-    const newNote = JSON.parse(json);
-        newNote.splice((idGrab - 1)); //remove note w/given ID; do -1 so it'll grab the corresponding id
+    const newNote = JSON.parse(json); 
+        newNote.splice((idGrab)); //splice newNote at (idGrab - 1) so that it'll grab the corresponding id 
         fs.writeFile('db.json', JSON.stringify(newNote), (err) => { //Rewrite notes to db.json
             if (err) {
                 throw err;
