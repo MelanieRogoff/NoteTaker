@@ -5,7 +5,7 @@ const jsonFile = require("./db"); //grabs db.json
 
 //Set up Express App:
 const app = express();
-const PORT = 3000; 
+const PORT = process.env.PORT || 3000;
 
 //Sets up Express app to handle data parsing
 app.use(express.urlencoded({ extended: true }));
