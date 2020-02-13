@@ -21,7 +21,7 @@ app.get("/notes", function(req, res) {
 app.get("/api/notes", function(req, res) {
         fs.readFile('db.json', 'utf-8', (err, json) => { //read db.json
                 let obj = (json); 
-                res.json(obj); //return ALL saved notes as JSON
+                res.json(JSON.parse(obj)); //return ALL saved notes as JSON
         })
     })
 
@@ -40,23 +40,22 @@ app.post("/api/notes", function(req, res) {
             if (err) {
                 throw err;
             } 
+            return res.json(noteArray); //return new note to client 
         })
-        return res.json(noteArray); //return new note to client -- MAY NEED TO PUT BACK IN WRITEFILE
 });
 })
 
-app.delete("/api/notes/:id", function(req, res) {
+app.delete("/api/notes/:id", function(req, res, json) {
     const idGrab = req.params.id; // this gets query param containing the note id
     //2: To delete notes:
     fs.readFile('db.json', 'utf-8', (err, json) => { //read ALL notes from db.json
-    //b. REMOVE note w/given ID-ensure ids corres w/array indexes. START AT 0. If id=the index, slice array AT that id and then we'll have the new values
-        noteArray.slice(idGrab);
-        //c. Then REWRITE the notes to db.json
-        fs.writeFile('db.json', JSON.stringify(noteArray), (err) => {
+    const newNote = JSON.parse(json);
+        newNote.splice((idGrab - 1)); //remove note w/given ID; do -1 so it'll grab the corresponding id
+        fs.writeFile('db.json', JSON.stringify(newNote), (err) => { //Rewrite notes to db.json
             if (err) {
                 throw err;
             }
-            return res.json(noteArray);
+            return res.json(JSON.stringify(newNote));
         })
 })
 });
