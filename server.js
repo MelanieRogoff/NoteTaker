@@ -46,10 +46,13 @@ app.post("/api/notes", function(req, res) {
 })
 
 app.delete("/api/notes/:id", function(req, res, json) {
-    const idGrab = req.params.id - 1; // gets query param containing note id. -1 lets us delete the last note.
     fs.readFile('db.json', 'utf-8', (err, json) => { //read ALL notes from db.json
     const newNote = JSON.parse(json); 
-        newNote.splice(idGrab); //splice newNote at (idGrab) so that it'll remove the note w/corresponding id 
+    for (let i = 0; i < newNote.length; i++) {
+        if (newNote[i].id === req.params.id) {
+            newNote.splice(newNote[i]); //splice newNote at (idGrab) so that it'll remove the note w/corresponding id 
+        }
+    }
         fs.writeFile('db.json', JSON.stringify(newNote), (err) => { //Rewrite notes to db.json
             if (err) {
                 throw err;
