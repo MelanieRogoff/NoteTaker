@@ -5,7 +5,7 @@ const $newNoteBtn = $(".new-note");
 const $noteList = $(".list-container .list-group");
 
 // activeNote is used to keep track of the note in the textarea
-let activeNote = {};
+const activeNote = {};
 
 // A function for getting all notes from the db
 const getNotes = function() {
@@ -17,7 +17,7 @@ const getNotes = function() {
 
 // A function for saving a note to the db
 const saveNote = function(note) {
-  return $.ajax({ //sends note to the server
+  return $.ajax({
     url: "/api/notes",
     data: note,
     method: "POST"
@@ -49,7 +49,7 @@ const renderActiveNote = function() {
   }
 };
 
-// Get note data from inputs, save it to the db and update the view
+// Get the note data from the inputs, save it to the db and update the view
 const handleNoteSave = function() {
   const newNote = {
     title: $noteTitle.val(),
@@ -109,11 +109,15 @@ const renderNoteList = function(notes) {
 
   const noteListItems = [];
 
-  for (const i = 0; i < notes.length; i++) {
+  for (let i = 0; i < notes.length; i++) {
     const note = notes[i];
 
-    const $li = $("<li class='list-group-item'>").data(note);
-    const $span = $("<span>").text(note.title);
+    const $li = $("<li class='list-group-item'>")
+    $li.data(note);
+
+    const $span = $("<span>")
+    $span.text(note.title);
+    
     const $delBtn = $(
       "<i class='fas fa-trash-alt float-right text-danger delete-note'>"
     );
