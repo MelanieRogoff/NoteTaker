@@ -49,8 +49,9 @@ app.delete("/api/notes/:id", function(req, res, json) {
     fs.readFile('db.json', 'utf-8', (err, json) => { //read ALL notes from db.json
     const newNote = JSON.parse(json);  //make a newNote variable w/the JSON data
     for (let i = 0; i < newNote.length; i++) { //loop through the array of notes
-        if (newNote[i].id == req.params.id) { //for the notes w/ids that match the req.params.id
-            newNote.splice(newNote[i]); //remove the specified note 
+        if (newNote[i].id == req.params.id) { //for notes w/ids that match req.params.id
+            newNote.splice(i, 1); //remove the specified note 
+            console.log(newNote);
         }
     }
         fs.writeFile('db.json', JSON.stringify(newNote), (err) => { //Rewrite notes minus deleted notes to db.json
